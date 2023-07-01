@@ -15,13 +15,13 @@ export default class SalaAlunosController {
             const aluno = await Aluno.findOrFail(aluno_id);
             const sala = await Sala.findOrFail(sala_id);
 
-            // RN03: Verificar se o aluno já está alocado na sala
+            // RN13: Verificar se o aluno já está alocado na sala
             const alunoAlocado = await SalaAluno.query().where('aluno_id', aluno.id).where('sala_id', sala.id).first();
             if (alunoAlocado) {
                 return response.status(400).json({ message: 'O aluno já está alocado nesta sala' });
             }
 
-            // RN04: Verificar capacidade da sala
+            // RN13: Verificar capacidade da sala
             const countAlunosSala = await SalaAluno.query().where('sala_id', sala.id).count('* as total');
             const totalAlunosSala = countAlunosSala[0]['total'];
             const capacidadeSala = sala.capacidade_alunos;
@@ -31,7 +31,9 @@ export default class SalaAlunosController {
 
 
 
-            // RN05: Verificar se o professor é o responsável pela sala
+            // RN13: Verificar se o professor é o responsável pela sala
+            // Aqui eu fiquei um pouco em dúvida para como fazer isso, então como em muitos casos um professor é responsável por uma sala, coloquei um campo professor_id na tabela salas e isso designa qual é o professor responsável por ela.
+
             const professor = await Professor.findOrFail(sala.professor_id);
             if (professor.id !== sala.professor_id) {
                 return response.status(403).json({ message: 'O professor não tem permissão para alocar o aluno nesta sala' });
@@ -75,18 +77,33 @@ export default class SalaAlunosController {
     }
 
 
-
-
     public async listarSalasAluno({ params, response }) {
         const { alunoId } = params;
-
+      
         try {
-            const salas = await SalaAluno.query().where('aluno_id', alunoId).preload('sala');
-
-            return response.json({ salas });
+          const salas = await SalaAluno.query()
+            .where('aluno_id', alunoId)
+            .preload('sala', (query) => {
+              query.preload('professor', (subquery) => {
+                subquery.select('nome');
+              });
+            })
+            .preload('aluno', (query) => {
+              query.select('nome');
+            });
+      
+          const resultado = salas.map((sala) => {
+            return {
+              nomeAluno: sala.aluno.nome,
+              nomeProfessor: sala.sala.professor.nome,
+              numeroSala: sala.sala.numero_sala,
+            };
+          });
+      
+          return response.json({ resultado });
         } catch (error) {
-            return response.status(400).json({ message: 'Não foi possível listar as salas do aluno: ' + error });
+          return response.status(400).json({ message: 'Não foi possível listar as salas do aluno: ' + error });
         }
-    }
-
+      }
+      
 }

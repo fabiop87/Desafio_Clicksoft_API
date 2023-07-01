@@ -19,7 +19,7 @@ export default class SalaAluno extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-
+  // relações com o model Aluno e Sala
   @belongsTo(() => Aluno, {
     foreignKey: 'aluno_id',
   })

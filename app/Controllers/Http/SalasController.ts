@@ -36,12 +36,12 @@ export default class SalasController {
 
     public async listarTodasSalas({ response }) {
         try {
-          const salas = await Sala.all()
-          return response.json({ salas })
+            const salas = await Sala.all()
+            return response.json({ salas })
         } catch (error) {
-          return response.status(400).json({ message: 'Não foi possível listar as salas' + error })
+            return response.status(400).json({ message: 'Não foi possível listar as salas' + error })
         }
-      }
+    }
 
 
 

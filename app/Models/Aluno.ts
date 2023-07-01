@@ -25,6 +25,7 @@ export default class Aluno extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
+  //relação com o model AlunoSala
 
   @hasOne(() => SalaAluno, {foreignKey:`aluno_id`})
   public sala: HasOne<typeof SalaAluno>

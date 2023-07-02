@@ -32,7 +32,7 @@ export default class Sala extends BaseModel {
   public updatedAt: DateTime
 
 
-  // relação com o model SalaAluno
+  // relaçöes com o model SalaAluno e Professor
   @hasOne(() => SalaAluno, { foreignKey: `sala_id` })
   public sala: HasOne<typeof SalaAluno>
 

@@ -17,10 +17,10 @@ export default class Sala extends BaseModel {
   public numero_sala: string
 
   @column()
-  public capacidade_alunos: string
+  public capacidade_alunos: number
 
   @column()
-  public disponibilidade: string
+  public disponibilidade: boolean
 
   @column()
   public professor_id: number

@@ -6,3 +6,9 @@
 <p>Foi a primeira API que fiz e primeira vez que fiz uma aplicação em node, então fui lendo a documentação, alguns vídeos no youtube, etc</p>
 
 <p>Fiz os testes com o insomnia e o arquivo com as rotas está na raiz do projeto, nomeado como `json com as rotas.json`</p>
+
+testes:
+1. node ace test --tags="@alunoeprofessor"
+2. @salas
+3. @salaaluno
+        
